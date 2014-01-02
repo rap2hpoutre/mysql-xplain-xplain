@@ -6,7 +6,7 @@
          verbose="true">
   <testsuites>
     <testsuite name="All">
-      <directory>../tests/</directory>
+      <directory>./tests/</directory>
     </testsuite>
   </testsuites>
 
