@@ -1,3 +1,3 @@
 <div class="container">
-	<p>Todo</p>
+	<pre><?php include('../LICENSE'); ?></pre>
 </div>

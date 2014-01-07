@@ -34,7 +34,7 @@
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li <?php if ($current_page == 'index') echo 'class="active"'; ?>>
-						<a href="index.php">Home</a>
+						<a href="./">Home</a>
 					</li>
 					<li <?php if ($current_page == 'config') echo 'class="active"'; ?>>
 						<a href="config.php">Configuration</a>
