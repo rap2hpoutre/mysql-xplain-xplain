@@ -1,6 +1,7 @@
+<?php $this->layout('layout'); ?>
 <div class="container">
-	<?php if (isset($error)): ?>
-		<div class="alert alert-danger"><?php echo $error; ?></div>
+	<?php if (isset($this->error)): ?>
+		<div class="alert alert-danger"><?=$this->error?></div>
 	<?php endif; ?>
 	<form role="form" method="post">
 		<div class="form-group">

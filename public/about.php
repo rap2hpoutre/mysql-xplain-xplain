@@ -1,7 +1,6 @@
 <?php
-$current_page = 'about';
+require '../app/base.php';
+use \Jasny\MySQL\DB as DB;
 
-// Affichage
-include '../app/templates/header.php';
-include '../app/templates/about.php';
-include '../app/templates/footer.php';
+$template->page = 'About';
+echo $template->render('about');

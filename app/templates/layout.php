@@ -7,7 +7,7 @@
 	<meta name="description" content="" />
 	<meta name="author" content="" />
 
-	<title>MySQL Explain Explain</title>
+	<title><?=$this->title?> - <?=$this->page?></title>
 
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="./css/default.css" />
@@ -33,16 +33,21 @@
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li <?php if ($current_page == 'index') echo 'class="active"'; ?>>
+					<li <?php if ($this->page == 'Home') echo 'class="active"'; ?>>
 						<a href="./">Home</a>
 					</li>
-					<li <?php if ($current_page == 'config') echo 'class="active"'; ?>>
+					<li <?php if ($this->page == 'Config') echo 'class="active"'; ?>>
 						<a href="config.php">Configuration</a>
 					</li>
-					<li <?php if ($current_page == 'about') echo 'class="active"'; ?>>
+					<li <?php if ($this->page == 'About') echo 'class="active"'; ?>>
 						<a href="about.php">About</a>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</div>
+	<?=$this->child()?>
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</body>
+</html>

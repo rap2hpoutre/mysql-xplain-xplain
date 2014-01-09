@@ -1,33 +1,29 @@
 <?php
-// TODO: Nettoyer ce code infect
-session_start();
+require '../app/base.php';
+use \Jasny\MySQL\DB as DB;
+use \Rap2hpoutre\MySQLExplainExplain\Explainer as Explainer;
+
+$query = '';
+$explainer = null;
 
 if (isset($_SESSION['mysql'])) {
-	$mysqli = new mysqli(
+	new DB(
 		$_SESSION['mysql']['host'], 
 		$_SESSION['mysql']['user'], 
 		$_SESSION['mysql']['password'], 
 		$_SESSION['mysql']['base']
 	);
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		if (strpos($_POST['query'], 'EXPLAIN') === false) {
-			$_POST['query'] = 'EXPLAIN ' . $_POST['query'];
-		}
-		$explain_results = array();
-		if ($result = $mysqli->query($_POST['query'])) {
-			while ($row = $result->fetch_assoc()) {
-				$explain_results[] = $row;
-			}
-			$result->free();
-		}
-		$mysqli->close();
+		$query = $_POST['query'];
+		$explain_results = DB::conn()->fetchAll((strpos($query, 'EXPLAIN') === false ? 'EXPLAIN ' : '') .$_POST['query']);
+		$explainer = new Explainer($explain_results);
 	}
 }
 
 
-$current_page = 'index';
 
 // Affichage
-include '../app/templates/header.php';
-include '../app/templates/default.php';
-include '../app/templates/footer.php';
+$template->page = 'Home';
+$template->explainer = $explainer;
+$template->query = $query;
+echo $template->render('home');

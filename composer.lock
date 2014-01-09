@@ -1,0 +1,120 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "a87ea6373cb30e9b887233348154864b",
+    "packages": [
+        {
+            "name": "jasny/db-mysql",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jasny/DB-MySQL.git",
+                "reference": "14a36fe90754343204d6e9c2f1351f8d51f0f05f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jasny/DB-MySQL/zipball/14a36fe90754343204d6e9c2f1351f8d51f0f05f",
+                "reference": "14a36fe90754343204d6e9c2f1351f8d51f0f05f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "jasny/config": "Configure your DB and make it work out of the box",
+                "jasny/dbquery-mysql": "Supports building, parsing and modifying MySQL queries"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Jasny\\MySQL\\DB": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arnold Daniels",
+                    "email": "arnold@jasny.net",
+                    "homepage": "http://www.jasny.net"
+                }
+            ],
+            "description": "A simple DB layer in PHP for using MySQL",
+            "homepage": "http://jasny.github.com/DB-MySQL",
+            "keywords": [
+                "database",
+                "db",
+                "mysql"
+            ],
+            "time": "2013-01-09 00:39:22"
+        },
+        {
+            "name": "league/plates",
+            "version": "1.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-loep/Plates.git",
+                "reference": "95a2443409f455ece373c5c7b5aaf03e4bb1537d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-loep/Plates/zipball/95a2443409f455ece373c5c7b5aaf03e4bb1537d",
+                "reference": "95a2443409f455ece373c5c7b5aaf03e4bb1537d",
+                "shasum": ""
+            },
+            "replace": {
+                "reinink/plates": "*"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "v1.2.0",
+                "mockery/mockery": "dev-master@dev",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "League\\Plates": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Reinink",
+                    "email": "jonathan@reinink.ca",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Plates, the native PHP template system that’s fast, easy to use and easy to extend.",
+            "homepage": "http://platesphp.com",
+            "keywords": [
+                "league",
+                "package",
+                "templating"
+            ],
+            "time": "2013-11-21 19:21:31"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

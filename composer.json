@@ -9,6 +9,7 @@
         }
     ],
     "require": {
-        "league/plates": "1.0.*"
+        "league/plates": "1.0.*",
+		"jasny/db-mysql": "*"
     }
 }
