@@ -4,9 +4,12 @@ namespace Rap2hpoutre\MySQLExplainExplain;
 class Cell {
 	public $v;
 	public $score = null;
+	public $info;
+	public $id;
 
 	public function __construct($v) {
 		$this->v = $v;
+		$this->id = uniqid('cell');
 	}
 
 	public function setSuccess() {

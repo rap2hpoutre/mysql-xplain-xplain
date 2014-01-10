@@ -29,20 +29,25 @@
 				<?php foreach($this->explainer->rows as $row) : ?>
 					<tr>
 						<?php foreach($row->cells as $cell): ?>
-							<?php if ($cell->isDanger()): ?>
-								<td><span class="label label-danger"><span class="glyphicon glyphicon-fire"></span> <?=$cell->v?></span></td>
-							<?php elseif ($cell->isSuccess()): ?>
-								<td><span class="label label-success"><span class="glyphicon glyphicon-thumbs-up"></span> <?=$cell->v?></span></td>
-							<?php elseif ($cell->isWarning()): ?>
-								<td><span class="label label-warning"><?=$cell->v?></span></td>
-							<?php else : ?>
-								<td><?=$cell->v?></td>
-							<?php endif; ?>
+							<td id="<?=$cell->id?>">
+								<a class="a-black" href="javascript:;" onclick="$('#comp_infos').html('<?=$cell->info?>').show();">
+									<?php if ($cell->isDanger()): ?>
+										<span class="label label-danger"><span class="glyphicon glyphicon-fire"></span> <?=$cell->v?></span>
+									<?php elseif ($cell->isSuccess()): ?>
+										<span class="label label-success"><span class="glyphicon glyphicon-thumbs-up"></span> <?=$cell->v?></span>
+									<?php elseif ($cell->isWarning()): ?>
+										<span class="label label-warning"><?=$cell->v?></span>
+									<?php else : ?>
+										<?=$cell->v?>
+									<?php endif; ?>
+								</a>
+							</td>
 						<?php endforeach; ?>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<div id="comp_infos" class="alert alert-info"></div>
 	<?php else : ?>
 		<p>No result ?!#/p>
 	<?php endif; ?>

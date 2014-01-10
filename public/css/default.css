@@ -1,3 +1,9 @@
 body {
     padding-top: 80px;
 }
+#comp_infos {
+    display: none;
+}
+.a-black {
+    color: #333 !important;
+}
