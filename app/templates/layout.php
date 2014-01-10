@@ -51,6 +51,9 @@
 		<?php if (isset($this->error)): ?>
 			<div class="alert alert-danger"><?=$this->error?></div>
 		<?php endif; ?>
+		<?php if (isset($this->flash_message)): ?>
+			<div class="alert alert-info"><?=$this->flash_message?></div>
+		<?php endif; ?>
 		<?=$this->child()?>
 	</div>
 

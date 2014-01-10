@@ -18,3 +18,8 @@ $engine = new \League\Plates\Engine('../app/templates');
 $template = new \League\Plates\Template($engine);
 
 $template->title = "MySQL Explain Explain";
+
+if (isset($_SESSION['flash_message'])) {
+	$template->flash_message  = $_SESSION['flash_message'];
+	unset($_SESSION['flash_message']);
+}

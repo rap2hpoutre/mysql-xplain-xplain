@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if ($c->connect_errno) {
 			throw new Exception ('Failed to connect to MySQL: ' . $c->connect_error);
 		}
-		// Login permanent : à faire plus propre
+		// Login permanent : à faire plus propre et plus secure
 		if (isset($_POST['permanent_login']) && $_POST['permanent_login'] == '1') {
 			$conf_dir = '../conf';
 			if (!file_exists($conf_dir)) mkdir ($conf_dir);
@@ -27,8 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					\'base\' => \'' . $_POST['base'] . '\'
 				);'
 			);
+		} else {
+			if (file_exists($conf_dir)) unlink($conf_dir . '/db.php');
 		}
 		// Redirection
+		$_SESSION['flash_message'] = 'MySQL connection successful :)';
 		header('Location: index.php');
 		exit;
 	} catch (\Exception $e) {
