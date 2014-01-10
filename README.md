@@ -4,6 +4,17 @@ mysql-xplain-xplain
 
 Explain Explainer for MySQL Queries
 
-Contributors :
+Getting started
+---------------
+### Install with composer
+    composer create-project rap2h/mysql-explain-explain --stability="dev" --prefer-dist
+### Download archive
+Todo :)
+
+
+Contributors 
+------------
   - tazorax
   - rap2hpoutre
+  - slythas
+  - ...
