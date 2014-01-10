@@ -1,6 +1,5 @@
 mysql-xplain-xplain
 ===================
-[![Build Status](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain.png?branch=master)](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain) [![Dependencies Status](https://depending.in/rap2hpoutre/mysql-xplain-xplain.png)](http://depending.in/rap2hpoutre/mysql-xplain-xplain) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rap2hpoutre/mysql-xplain-xplain/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 Explain Explainer for MySQL Queries
 
@@ -20,5 +19,4 @@ Contributors
   - ...
 
 
-
-
+[![Build Status](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain.png?branch=master)](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain) [![Dependencies Status](https://depending.in/rap2hpoutre/mysql-xplain-xplain.png)](http://depending.in/rap2hpoutre/mysql-xplain-xplain) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rap2hpoutre/mysql-xplain-xplain/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
