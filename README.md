@@ -18,3 +18,7 @@ Contributors
   - rap2hpoutre
   - slythas
   - ...
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rap2hpoutre/mysql-xplain-xplain/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
