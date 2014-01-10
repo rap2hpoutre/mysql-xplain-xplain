@@ -14,12 +14,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if ($c->connect_errno) {
 			throw new Exception ('Failed to connect to MySQL: ' . $c->connect_error);
 		}
-		$_SESSION['mysql'] = array(
-			'host' 		=> 	$_POST['host'],
-			'user' 		=> 	$_POST['user'],
-			'password' 	=> 	$_POST['password'],
-			'base' 		=> 	$_POST['base'],
-		);
+		// Login permanent : à faire plus propre
+		if (isset($_POST['permanent_login']) && $_POST['permanent_login'] == '1') {
+			$conf_dir = '../conf';
+			if (!file_exists($conf_dir)) mkdir ($conf_dir);
+			file_put_contents(
+				$conf_dir . '/db.php',
+				'<?php $_SESSION[\'mysql\'] = array(
+					\'host\' => \'' . $_POST['host'] . '\',
+					\'user\' => \'' . $_POST['user'] . '\',
+					\'password\' => \'' . $_POST['password'] . '\',
+					\'base\' => \'' . $_POST['base'] . '\'
+				);'
+			);
+		}
+		// Redirection
+		header('Location: index.php');
+		exit;
 	} catch (\Exception $e) {
 		$template->error = utf8_encode($e->getMessage());
 	}

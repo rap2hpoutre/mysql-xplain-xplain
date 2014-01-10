@@ -46,7 +46,14 @@
 			</div>
 		</div>
 	</div>
-	<?=$this->child()?>
+
+	<div class="container">
+		<?php if (isset($this->error)): ?>
+			<div class="alert alert-danger"><?=$this->error?></div>
+		<?php endif; ?>
+		<?=$this->child()?>
+	</div>
+
 	<script src="https://code.jquery.com/jquery.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </body>

@@ -1,6 +1,9 @@
 <?php
 require '../app/base.php';
+
 use \Jasny\MySQL\DB as DB;
+use \Jasny\MySQL\DB_Exception as DB_Exception;
+
 use \Rap2hpoutre\MySQLExplainExplain\Explainer as Explainer;
 
 $query = '';
@@ -15,11 +18,19 @@ if (isset($_SESSION['mysql'])) {
 	);
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$query = $_POST['query'];
-		$explain_results = DB::conn()->fetchAll((strpos($query, 'EXPLAIN') === false ? 'EXPLAIN ' : '') .$_POST['query']);
-		$explainer = new Explainer($explain_results);
+		try {
+			$explain_results = DB::conn()->fetchAll(
+				(strpos(strtolower($query), 'explain') === false ? 'EXPLAIN ' : '') . $_POST['query']
+			);
+			$explainer = new Explainer($explain_results);
+		} catch (DB_Exception $e) {
+			$template->error = utf8_encode($e->getError());
+		}
 	}
+} else {
+	header('Location: config.php');
+	exit;
 }
-
 
 
 // Affichage
