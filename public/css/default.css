@@ -1,3 +1,9 @@
 body {
     padding-top: 80px;
 }
+textarea {
+	margin-top: 10px;
+}
+#form-content .pull-right {
+	margin-bottom: 10px;
+}

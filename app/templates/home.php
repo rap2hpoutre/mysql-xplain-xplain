@@ -1,9 +1,13 @@
 <?php $this->layout('layout'); ?>
 <form role="form" method="post">
-	<div class="form-group">
+	<div class="form-group" id="form-content">
 		<label for="query">Query</label>
-		<textarea name="query" id="query" class="form-control" rows="8" placeholder="Type your SQL query here..."><?=$this->query?></textarea>
+		<div class="pull-right">
+			<a href="#" class="btn btn-default" data-action="addContext"><span class="glyphicon glyphicon-plus">&nbsp;</span>Add contextal queries</a>
+		</div>
+		<textarea name="query" id="query" class="form-control colorizeIt" rows="8" placeholder="Type your SQL query here..."><?=$this->query?></textarea>
 	</div>
+
 	<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span> Perform analysis</button>
 </form>
 <?php if (isset($this->explainer)) : ?>
