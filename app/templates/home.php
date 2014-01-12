@@ -13,16 +13,13 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>#</th>
-					<th>select_type</th>
-					<th>table</th>
-					<th>type</th>
-					<th>possible_keys</th>
-					<th>key</th>
-					<th>key_len</th>
-					<th>ref</th>
-					<th>rows</th>
-					<th>Extra</th>
+					<?php
+					foreach($this->explainer->header_row as $col => $infos) {
+					?>
+						<th><a class="a-black" href="javascript:;" onclick="$('#infos_text').html('<?=$infos;?>').parent().show();" ><?=$col;?></a></th>
+					<?php
+					}
+					?>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,7 +27,7 @@
 					<tr>
 						<?php foreach($row->cells as $cell): ?>
 							<td id="<?=$cell->id?>">
-								<a class="a-black" href="javascript:;" onclick="$('#comp_infos').html('<?=$cell->info?>').show();">
+								<a class="a-black" href="javascript:;" onclick="$('#infos_text').html('<?=$cell->info?>').parent().show();">
 									<?php if ($cell->isDanger()): ?>
 										<span class="label label-danger"><span class="glyphicon glyphicon-fire"></span> <?=$cell->v?></span>
 									<?php elseif ($cell->isSuccess()): ?>
@@ -47,7 +44,10 @@
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<div id="comp_infos" class="alert alert-info"></div>
+		<div id="comp_infos" class="alert alert-info">
+			<span id="infos_text"></span>
+			<a target="_blank" href="<?= $this->mysql_base_doc_url;?>" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
+		</div>
 	<?php else : ?>
 		<p>No result ?!#/p>
 	<?php endif; ?>
