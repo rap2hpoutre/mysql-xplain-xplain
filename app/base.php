@@ -1,9 +1,13 @@
 <?php
+
+
+
 require '../vendor/autoload.php';
 
 require '../app/Explainer.class.php';
 require '../app/Row.class.php';
 require '../app/Cell.class.php';
+require '../app/constants.php';
 
 session_start();
 
