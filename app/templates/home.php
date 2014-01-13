@@ -3,8 +3,9 @@
 	<div class="form-group" id="form-content">
 		<label for="query">Query</label>
 		<div class="pull-right">
-			<a href="#" class="btn btn-default" data-action="addContext" data-params='{"param1": "example"}'><span class="glyphicon glyphicon-plus">&nbsp;</span>Add contextal queries</a>
+			<a href="#" class="btn btn-default btn-sm" data-action="addContext"><span class="glyphicon glyphicon-plus">&nbsp;</span>Add contextal queries</a>
 		</div>
+		<textarea name="context_queries" id="context_queries" class="form-control" rows="8" placeholder="Add contextual queries here... You can add multiple queries separated by semicolon"></textarea>
 		<textarea name="query" id="query" class="form-control colorizeIt" rows="8" placeholder="Type your SQL query here..."><?=$this->query?></textarea>
 	</div>
 
@@ -20,7 +21,7 @@
 					<?php
 					foreach($this->explainer->header_row as $col => $infos) {
 					?>
-						<th><a class="a-black" href="javascript:;" onclick="$('#infos_text').html('<?=$infos;?>').parent().show();" ><?=$col;?></a></th>
+						<th><a class="a-black" href="javascript:;" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $infos)));?>" ><?=$col;?></a></th>
 					<?php
 					}
 					?>
@@ -31,7 +32,7 @@
 					<tr>
 						<?php foreach($row->cells as $cell): ?>
 							<td id="<?=$cell->id?>">
-								<a class="a-black" href="javascript:;" onclick="$('#infos_text').html('<?=$cell->info?>').parent().show();">
+								<a class="a-black" href="javascript:;" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $cell->info)));?>">
 									<?php if ($cell->isDanger()): ?>
 										<span class="label label-danger"><span class="glyphicon glyphicon-fire"></span> <?=$cell->v?></span>
 									<?php elseif ($cell->isSuccess()): ?>
@@ -50,7 +51,7 @@
 		</table>
 		<div id="comp_infos" class="alert alert-info">
 			<span id="infos_text"></span>
-			<a target="_blank" href="<?= $this->mysql_base_doc_url;?>" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
+			<a target="_blank" href="<?= $this->mysql_base_doc_url;?>#" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
 		</div>
 	<?php else : ?>
 		<p>No result ?!#/p>

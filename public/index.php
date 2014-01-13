@@ -20,6 +20,13 @@ if (isset($_SESSION['mysql'])) {
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$query = $_POST['query'];
 		try {
+			// Contextual queries (on les exécute sans rien en faire)
+			if (isset($_POST['context_queries'])) {
+				DB::conn()->multi_query($_POST['context_queries']);
+				// Code pour jeter les résultats à la poubelle
+				do { if ($res = DB::conn()->store_result()) $res->free(); } while (DB::conn()->more_results() && DB::conn()->next_result());
+			}
+
 			$explain_results = DB::conn()->fetchAll(
 				(strpos(strtolower($query), 'explain') === false ? 'EXPLAIN ' : '') . $_POST['query']
 			);

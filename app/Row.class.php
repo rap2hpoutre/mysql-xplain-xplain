@@ -1,6 +1,9 @@
 <?php
 namespace Rap2hpoutre\MySQLExplainExplain;
 
+use \Jasny\MySQL\DB as DB;
+use \Jasny\MySQL\DB_Exception as DB_Exception;
+
 class Row {
 	public $cells = array();
 
@@ -8,13 +11,16 @@ class Row {
 		foreach($row as $k => $v) {
 			$this->cells[$k] = new Cell($v);
 		}
-		$this->performSelectType();
+		$this->performSelectTypeAnalysis();
 		$this->performExtraAnalysis();
 		$this->performKeyAnalysis();
 		$this->performTypeAnalysis();
+
+		$this->buildTableSchema();
+
 	}
 
-	public function performSelectType() {
+	public function performSelectTypeAnalysis() {
 		$infos = array(
 			'SIMPLE' => 'Simple SELECT (not using UNION or subqueries)',
 			'PRIMARY' => 'Outermost SELECT',
@@ -47,6 +53,11 @@ class Row {
 		if ($this->cells['type']->v == 'ALL') {
 			$this->cells['type']->setWarning();
 		}
+	}
+
+	public function buildTableSchema() {
+		$table_schema = DB::conn()->fetchPairs("SHOW CREATE TABLE {$this->cells['table']->v}");
+		$this->cells['table']->info = $table_schema[$this->cells['table']->v];
 	}
 
 }

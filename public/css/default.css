@@ -6,10 +6,15 @@ body {
 }
 .a-black {
     color: #333 !important;
+    text-decoration: none !important;
 }
 textarea {
 	margin-top: 10px;
 }
 #form-content .pull-right {
 	margin-bottom: 10px;
+    margin-top: -5px;
+}
+#context_queries {
+    display: none;
 }

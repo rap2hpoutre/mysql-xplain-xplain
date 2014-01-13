@@ -1,16 +1,25 @@
 $(function() {
 
 	var Actions = {
-		addContext: (function(alreadyInclude) {
+		// Ajout de la zone de contexte des requetes
+        addContext: (function(alreadyInclude) {
 			return function(e) {
 				e.stopPropagation();
 				e.preventDefault();
 				if(!alreadyInclude) {
-					$('<textarea name="" class="form-control" rows="8" placeholder="Type your SQL query here..."></textarea>').insertBefore('#query');
+                    $('#context_queries').show();
 					alreadyInclude = true;
 				}
 			}
-		})(false)
+		})(false),
+        // Les infos sur une donnée de l'explain
+        showInfos: (function() {
+            return function(e, params) {
+                e.stopPropagation();
+                e.preventDefault();
+                $('#infos_text').html(params["infos"]).parent().show();
+            }
+        })(false)
 	};
 
 	$('[data-action]').each(function() {
