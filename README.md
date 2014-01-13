@@ -14,5 +14,4 @@ Contributors
   - tazorax
   - rap2hpoutre
   - slythas
-  - ...
-  - 
+  - vincent-aubert
