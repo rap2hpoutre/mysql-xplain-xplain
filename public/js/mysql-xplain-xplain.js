@@ -18,7 +18,11 @@ $(function() {
 			click: function(e) {
 				var fnName = $(this).data('action');
 				if(typeof Actions[fnName] === 'function') {
-					Actions[fnName].apply(null, [e]);
+					var params = $(this).data('params');
+					try {
+						params = JSON.parse(params);
+					} catch(e) { }
+					Actions[fnName].apply(null, [e, params]);
 				}
 			}
 		});

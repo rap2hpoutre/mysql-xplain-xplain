@@ -3,7 +3,7 @@
 	<div class="form-group" id="form-content">
 		<label for="query">Query</label>
 		<div class="pull-right">
-			<a href="#" class="btn btn-default" data-action="addContext"><span class="glyphicon glyphicon-plus">&nbsp;</span>Add contextal queries</a>
+			<a href="#" class="btn btn-default" data-action="addContext" data-params='{"param1": "example"}'><span class="glyphicon glyphicon-plus">&nbsp;</span>Add contextal queries</a>
 		</div>
 		<textarea name="query" id="query" class="form-control colorizeIt" rows="8" placeholder="Type your SQL query here..."><?=$this->query?></textarea>
 	</div>
