@@ -18,13 +18,9 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<?php
-					foreach($this->explainer->header_row as $col => $infos) {
-					?>
-						<th><a class="a-black" href="javascript:;" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $infos)));?>" ><?=$col;?></a></th>
-					<?php
-					}
-					?>
+					<?php foreach($this->explainer->header_row as $col => $infos) : ?>
+						<th><a class="a-black" href="#" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $infos, "link" => $this->mysql_base_doc_url . "#explain_$col")));?>" ><?=$col;?></a></th>
+					<?php endforeach; ?>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,7 +28,7 @@
 					<tr>
 						<?php foreach($row->cells as $cell): ?>
 							<td id="<?=$cell->id?>">
-								<a class="a-black" href="javascript:;" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $cell->info)));?>">
+								<a class="a-black" href="#" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $cell->info, "link" => "#")));?>">
 									<?php if ($cell->isDanger()): ?>
 										<span class="label label-danger"><span class="glyphicon glyphicon-fire"></span> <?=$cell->v?></span>
 									<?php elseif ($cell->isSuccess()): ?>
@@ -51,7 +47,7 @@
 		</table>
 		<div id="comp_infos" class="alert alert-info">
 			<span id="infos_text"></span>
-			<a target="_blank" href="<?= $this->mysql_base_doc_url;?>#" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
+			<a id="mysql_doc_link" target="_blank" href="#" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
 		</div>
 	<?php else : ?>
 		<p>No result ?!#/p>

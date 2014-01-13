@@ -18,6 +18,7 @@ $(function() {
                 e.stopPropagation();
                 e.preventDefault();
                 $('#infos_text').html(params["infos"]).parent().show();
+                $('#mysql_doc_link').attr('href', params["link"]);
             }
         })(false)
 	};

@@ -17,7 +17,7 @@ class Row {
 		$this->performTypeAnalysis();
 
 		$this->buildTableSchema();
-
+		$this->cells['id']->info = 'id';
 	}
 
 	public function performSelectTypeAnalysis() {
@@ -53,11 +53,18 @@ class Row {
 		if ($this->cells['type']->v == 'ALL') {
 			$this->cells['type']->setWarning();
 		}
+
+		$infos = array(
+			'system' => 'The table has only one row (= system table). This is a special case of the const join type.',
+			'const' => 'The table has at most one matching row, which is read at the start of the query. In the following queries, tbl_name can be used as a const table:' .  \SqlFormatter::highlight("SELECT * FROM tbl_name WHERE primary_key=1;"),
+			'eq_ref' => 'ecoSnd or later SELECT statement in a UNION'
+		);
+		$this->cells['type']->info = $infos[$this->cells['type']->v];
 	}
 
 	public function buildTableSchema() {
 		$table_schema = DB::conn()->fetchPairs("SHOW CREATE TABLE {$this->cells['table']->v}");
-		$this->cells['table']->info = $table_schema[$this->cells['table']->v];
+		$this->cells['table']->info = \SqlFormatter::format($table_schema[$this->cells['table']->v]);
 	}
 
 }
