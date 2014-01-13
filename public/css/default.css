@@ -7,3 +7,9 @@ body {
 .a-black {
     color: #333 !important;
 }
+textarea {
+	margin-top: 10px;
+}
+#form-content .pull-right {
+	margin-bottom: 10px;
+}
