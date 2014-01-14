@@ -46,8 +46,8 @@
 			</tbody>
 		</table>
 		<div id="comp_infos" class="alert alert-info">
+			<a id="mysql_doc_link" class="pull-right" target="_blank" href="#" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
 			<span id="infos_text"></span>
-			<a id="mysql_doc_link" target="_blank" href="#" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
 		</div>
 	<?php else : ?>
 		<p>No result ?!#/p>
