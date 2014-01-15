@@ -14,6 +14,7 @@
 <?php if (isset($this->explainer)) : ?>
 	<hr />
 	<label>Result</label>
+	<!-- <i> Click on each cell to understand result</i> -->
 	<?php if (count($this->explainer->rows)>0): ?>
 		<table class="table table-striped">
 			<thead>
