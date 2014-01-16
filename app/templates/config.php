@@ -14,7 +14,7 @@
 	</div>
 	<div class="form-group">
 		<label for="base">Default database</label>
-		<input type="text" class="form-control" name="base" id="base" value="<?php if (isset($_SESSION['mysql']['base'])) echo $_SESSION['mysql']['base']; ?>">
+		<input type="text" class="form-control" name="base" id="base" placeholder="test" value="<?php if (isset($_SESSION['mysql']['base'])) echo $_SESSION['mysql']['base']; ?>">
 	</div>
 	<div class="checkbox">
 		<label>

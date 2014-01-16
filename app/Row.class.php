@@ -4,9 +4,19 @@ namespace Rap2hpoutre\MySQLExplainExplain;
 use \Jasny\MySQL\DB as DB;
 use \Jasny\MySQL\DB_Exception as DB_Exception;
 
+/**
+ * Class Row
+ * @package Rap2hpoutre\MySQLExplainExplain
+ */
 class Row {
+	/**
+	 * @var array
+	 */
 	public $cells = array();
 
+	/**
+	 * @param $row
+	 */
 	public function __construct($row) {
 		foreach($row as $k => $v) {
 			$this->cells[$k] = new Cell($v);
@@ -22,6 +32,9 @@ class Row {
 		$this->cells['rows']->info = "MySQL believes it must examine {$this->cells['rows']->v} rows to execute the query";
 	}
 
+	/**
+	 * Analyse de la colonne type
+	 */
 	public function performSelectTypeAnalysis() {
 		$infos = array(
 			'SIMPLE' => 'Simple SELECT (not using UNION or subqueries)',
@@ -39,6 +52,9 @@ class Row {
 		$this->cells['select_type']->info = $infos[$this->cells['select_type']->v];
 	}
 
+	/**
+	 * Analyse de la colonne extra
+	 */
 	public function performExtraAnalysis() {
 		// La colonne extra contient des infos multiples alors on utilise un tableau d'information
 		// Par contre l'état (danger ou success) reste global à la cellule et est à gérer au cas par cas
@@ -55,29 +71,52 @@ class Row {
 							pointer to the row for all rows that match the WHERE clause.</li>
 						</ul>';
 		}
+		// Contient Impossible WHERE noticed after reading const tables
 		if (preg_match('/Impossible WHERE noticed after reading const tables/', $this->cells['Extra']->v)) {
 			$infos[] = 	'MySQL has read all <code>const</code> (and <code>system</code>) tables and 
 						notice that the WHERE clause is always false';
-		} 
+		}
+		// Contient Using where
 		if(preg_match('/Using where/', $this->cells['Extra']->v)) {
-			$infos[] = "A WHERE clause is used to restrict which rows to match against the next table or send to the client. Unless you specifically intend to fetch or examine all rows from the table, you may have something wrong in your query if the <code>Extra</code> value is not <code>Using where</code> and the table join type is <code>ALL</code> or <code>index</code>.";
+			$infos[] = "A WHERE clause is used to restrict which rows to match against the next table or send to the client.
+						Unless you specifically intend to fetch or examine all rows from the table, you may have something
+						wrong in your query if the <code>Extra</code> value is not <code>Using where</code> and the table join
+						type is <code>ALL</code> or <code>index</code>.";
 		}
-		if($tmp = preg_match('/Using join buffer \\((.*?)\\)/', $this->cells['Extra']->v, $matches)) {
-			$infos[] = "Tables from earlier joins are read in portions into the join buffer, and then their rows are used from the buffer to perform the join with the current table <code>{$this->cells['table']->v}</code> using <code>{$matches[1]}</code> algorithm";
+		// Contient Using join buffer
+		if(preg_match('/Using join buffer \\((.*?)\\)/', $this->cells['Extra']->v, $matches)) {
+			$infos[] = "Tables from earlier joins are read in portions into the join buffer, and then their rows
+						are used from the buffer to perform the join with the current table
+						<code>{$this->cells['table']->v}</code> using <code>{$matches[1]}</code> algorithm";
 		}
-		if($tmp = preg_match('/Using index/', $this->cells['Extra']->v)) {
-			$tmp = "The column information is retrieved from the table using only information in the index tree without having to do an additional seek to read the actual row. This strategy can be used when the query uses only columns that are part of a single index.";
+		// Contient Using index
+		if(preg_match('/Using index/', $this->cells['Extra']->v)) {
+			$tmp = "The column information is retrieved from the table using only information in the index tree
+					without having to do an additional seek to read the actual row.
+					This strategy can be used when the query uses only columns that are part of a single index.";
 			if(preg_match('/Using where/', $this->cells['Extra']->v)) {
 				$tmp .= "The index is being used to perform lookups of key values";
 			} else {
-				$tmp .= "The optimizer may be reading the index to avoid reading data rows but not using it for lookups. For example, if the index is a covering index for the query, the optimizer may scan it without using it for lookups.";
+				$tmp .= "The optimizer may be reading the index to avoid reading data rows but not using it for lookups.
+						For example, if the index is a covering index for the query, the optimizer may scan it without using it for lookups.";
 			}
 			$infos[] = $tmp;
+		}
+		// Contient const row not found
+		if(preg_match('/const row not found/', $this->cells['Extra']->v)) {
+			$infos[] = "The table was empty";
+		}
+
+		if (!count($infos)) {
+			$infos[] = 'Not Implemented Now :(';
 		}
 		
 		$this->cells['Extra']->info = implode('<br /><br />', $infos);
 	}
 
+	/**
+	 *
+	 */
 	public function performKeyAnalysis() {
 		$this->cells['key']->v = str_replace(',', ', ', $this->cells['key']->v);
 		$this->cells['possible_keys']->v = str_replace(',', ', ', $this->cells['possible_keys']->v);
@@ -130,6 +169,9 @@ class Row {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function performTypeAnalysis() {
 		if (!$this->cells['type']->v) return;
 		if ($this->cells['type']->v == 'ALL') {
@@ -166,6 +208,9 @@ class Row {
 		$this->cells['type']->info = $infos[$this->cells['type']->v];
 	}
 
+	/**
+	 *
+	 */
 	public function buildTableSchema() {
 		$this->cells['table']->info = 'No table schema informations';
 		try {
@@ -175,6 +220,9 @@ class Row {
 		} catch (DB_Exception $e) { }
 	}
 
+	/**
+	 *
+	 */
 	public function performRefAnalysis() {
 		if (!$this->cells['ref']->v) return;
 		// s'il s'agit d'une référence à une colonne d'une table

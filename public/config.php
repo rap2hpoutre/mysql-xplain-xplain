@@ -5,6 +5,9 @@ use \Jasny\MySQL\DB as DB;
 // Enregistrement de Configuration MySQl
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	try {
+		if (!$_POST['host']) $_POST['host'] = 'localhost';
+		if (!$_POST['user']) $_POST['user'] = 'root';
+		if (!$_POST['base']) $_POST['base'] = 'test';
 		$c = @new DB(
 			$_POST['host'], 
 			$_POST['user'], 
@@ -15,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			throw new Exception ('Failed to connect to MySQL: ' . $c->connect_error);
 		}
 		// Login permanent : à faire plus propre et plus secure
+		$conf_dir = '../conf';
 		if (isset($_POST['permanent_login']) && $_POST['permanent_login'] == '1') {
-			$conf_dir = '../conf';
 			if (!file_exists($conf_dir)) mkdir ($conf_dir);
 			file_put_contents(
 				$conf_dir . '/db.php',
@@ -28,7 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				);'
 			);
 		} else {
-			if (file_exists($conf_dir)) unlink($conf_dir . '/db.php');
+			if (file_exists($conf_dir . '/db.php')) unlink($conf_dir . '/db.php');
+			$_SESSION['mysql'] = array(
+				'host' => $_POST['host'],
+				'user' => $_POST['user'],
+				'password' => $_POST['password'],
+				'base' => $_POST['base']
+			);
 		}
 		// Redirection
 		$_SESSION['flash_message'] = 'MySQL connection successful :)';

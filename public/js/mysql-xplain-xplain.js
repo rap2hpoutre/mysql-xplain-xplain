@@ -8,6 +8,7 @@ $(function() {
 				e.preventDefault();
 				if(!alreadyInclude) {
                     $('#context_queries').show();
+                    $('#addContext').addClass('disabled');
 					alreadyInclude = true;
 				}
 			}
