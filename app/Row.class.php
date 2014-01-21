@@ -15,19 +15,37 @@ class Row {
 	public $cells = array();
 
 	/**
-	 * @param $row
+	 * @var array
 	 */
-	public function __construct($row) {
+	private $_keys = array();
+
+	/**
+	 * On peut accéder à la ligne précédente (utile pour analyser les jointures)
+	 * @var Row
+	 */
+	private $_previous_row = null;
+
+	/**
+	 * @param $row
+	 * @param Row $prev
+	 */
+	public function __construct($row, Row $prev = null) {
 		foreach($row as $k => $v) {
 			$this->cells[$k] = new Cell($v);
 		}
+		if ($prev !== null) {
+			$this->_previous_row = $prev;
+		}
+
+		$this->buildTableSchema();
+		$this->initKeys($this->cells['table']->v);
+
 		$this->performSelectTypeAnalysis();
 		$this->performExtraAnalysis();
 		$this->performKeyAnalysis();
 		$this->performTypeAnalysis();
 		$this->performRefAnalysis();
 
-		$this->buildTableSchema();
 		$this->cells['id']->info = 'SELECT identifier #' . $this->cells['id']->v;
 		$this->cells['rows']->info = "MySQL believes it must examine {$this->cells['rows']->v} rows to execute the query";
 	}
@@ -70,6 +88,12 @@ class Row {
 							The sort is done by going through all rows according to the join type and storing the sort key and 
 							pointer to the row for all rows that match the WHERE clause.</li>
 						</ul>';
+		} elseif (preg_match('/Using temporary(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = 'To resolve the query, MySQL needs to create a temporary table to hold the result';
+		} elseif (preg_match('/Using filesort(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = 'MySQL must do an extra pass to find out how to retrieve the rows in sorted order.
+						The sort is done by going through all rows according to the join type and storing the sort key and
+						pointer to the row for all rows that match the WHERE clause';
 		}
 		// Contient Impossible WHERE noticed after reading const tables
 		if (preg_match('/Impossible WHERE noticed after reading const tables/', $this->cells['Extra']->v)) {
@@ -77,7 +101,7 @@ class Row {
 						notice that the WHERE clause is always false';
 		}
 		// Contient Using where
-		if(preg_match('/Using where/', $this->cells['Extra']->v)) {
+		if(preg_match('/Using where(;|$)/', $this->cells['Extra']->v)) {
 			$infos[] = "A WHERE clause is used to restrict which rows to match against the next table or send to the client.
 						Unless you specifically intend to fetch or examine all rows from the table, you may have something
 						wrong in your query if the <code>Extra</code> value is not <code>Using where</code> and the table join
@@ -90,7 +114,7 @@ class Row {
 						<code>{$this->cells['table']->v}</code> using <code>{$matches[1]}</code> algorithm";
 		}
 		// Contient Using index
-		if(preg_match('/Using index/', $this->cells['Extra']->v)) {
+		if(preg_match('/Using index(;|$)/', $this->cells['Extra']->v)) {
 			$tmp = "The column information is retrieved from the table using only information in the index tree
 					without having to do an additional seek to read the actual row.
 					This strategy can be used when the query uses only columns that are part of a single index.";
@@ -107,6 +131,26 @@ class Row {
 			$infos[] = "The table was empty";
 		}
 
+		// Traités dans l'ordre de l'apparition dans la doc
+
+		// Distinct
+		if(preg_match('/Distinct(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "MySQL is looking for distinct values, so it stops searching for more rows
+						for the current row combination after it has found the first matching row";
+		}
+		// Full scan on NULL key
+		if(preg_match('/Full scan on NULL key(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "This occurs for subquery optimization as a fallback strategy
+						when the optimizer cannot use an index-lookup access method.";
+		}
+		// Impossible HAVING
+		if(preg_match('/Impossible HAVING(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "The HAVING clause is always false and cannot select any rows.";
+		}
+		// Impossible WHERE
+		if(preg_match('/Impossible WHERE(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "The WHERE clause is always false and cannot select any rows.";
+		}
 		if (!count($infos)) {
 			$infos[] = 'Not Implemented Now :(';
 		}
@@ -138,22 +182,17 @@ class Row {
 			}
 		}
 
-
 		// DANGER: Pas de possible_keys alors qu'il y a un WHERE
 		if (!$this->cells['possible_keys']->v && preg_match('/Using where/', $this->cells['Extra']->v)) {
 			$this->cells['possible_keys']->v = 'NULL';
 			$this->cells['possible_keys']->setDanger();
-			try {
-				$indexes = DB::conn()->fetchAll("SHOW INDEX FROM {$this->cells['table']->v}");
-			} catch (DB_Exception $e) {
-				$indexes = null;
-			}
+			$indexes = $this->_keys;
 			// S'il y avait des index dans la table, on propose d'utiliser ceux-là
 			if (count($indexes)) {
 				$this->cells['possible_keys']->info = "You have the following indexes in table <code>{$this->cells['table']->v}</code> : ";
 				$indexes_text = array();
 				foreach($indexes as $index) {
-					$indexes_text[] = $index['Key_name'];
+					$indexes_text[] = $index->key_name;
 				}
 				$this->cells['possible_keys']->info .= '<code>' . implode(', ', $indexes_text) . '</code><br />';
 				$this->cells['possible_keys']->info .= 'You should use one of them or add new ones !';
@@ -181,10 +220,12 @@ class Row {
 		$infos = array(
 			'system' =>         'The table has only one row (= system table). This is a special case of the const join type.',
 			'const' =>          "<p>The table has at most one matching row, which is read at the start of the query.
-								In the following queries, {$this->cells['table']->v} can be used as a const table:</p>" .
-								\SqlFormatter::highlight("SELECT * FROM {$this->cells['table']->v} WHERE primary_key=1;"),
+								In the following queries, <code>{$this->cells['table']->v}</code> can be used as a const table:</p>" .
+								\SqlFormatter::highlight("SELECT * FROM {$this->cells['table']->v} WHERE {$this->getPrimaryKey()->col_name}=1;"),
 			'eq_ref' =>         '<p>One row is read from this table for each combination of rows from the previous tables. Example:</p>' .
-								\SqlFormatter::highlight("SELECT * FROM ref_table,{$this->cells['table']->v} WHERE ref_table.key_column={$this->cells['table']->v}.column;"),
+								\SqlFormatter::highlight(
+									"SELECT * FROM ref_table,{$this->cells['table']->v} WHERE ref_table.key_column={$this->cells['table']->v}.column;"
+								),
 			'ref' =>            '<p>All rows with matching index values are read from this table for each combination of rows from the previous tables. Example:</p>' .
 								\SqlFormatter::highlight("SELECT * FROM {$this->cells['table']->v} WHERE {$this->cells['key']->v}=expr;"),
 			'fulltext' =>       'The join is performed using a FULLTEXT index',
@@ -225,13 +266,34 @@ class Row {
 	 */
 	public function performRefAnalysis() {
 		if (!$this->cells['ref']->v) return;
-		// s'il s'agit d'une référence à une colonne d'une table
+		// s'il s'agit d'une référence à une colonne d'une table : base.table.column
 		if (preg_match('/^.+?\\..+?\\..+$/', $this->cells['ref']->v)) {
 			$ref_infos = explode('.', $this->cells['ref']->v);
 			$this->cells['ref']->info = "The <code>{$ref_infos[2]}</code> column of table <code>{$ref_infos[1]}</code> is compared to 
 										<code>{$this->cells['key']->v}</code> key of table <code>{$this->cells['table']->v}</code>";
 		}
+		if (preg_match('/const/', $this->cells['ref']->v)) {
+			$this->cells['ref']->info = "A constant value is compared to <code>{$this->cells['key']->v}</code>";
+		}
 		
 	}
 
+	public function initKeys($table) {
+		try {
+			$sql_keys = DB::conn()->fetchAll("SHOW INDEX FROM $table");
+			if (is_array($sql_keys)) {
+				foreach($sql_keys as $sql_key) {
+					$this->_keys[] = new Key($sql_key);
+				}
+			}
+		} catch (DB_Exception $e) {	}
+	}
+
+	public function getPrimaryKey() {
+		if (is_array($this->_keys)) {
+			foreach($this->_keys as $key) {
+				if ($key->isPrimary()) return $key;
+			}
+		}
+	}
 }

@@ -33,8 +33,10 @@ class Explainer {
 	}
 
 	public function setResults($results) {
-		foreach($results as $result) {
-			$this->rows[] = new Row($result);
+		$last_key = null;
+		foreach($results as $key => $result) {
+			$nb_rows = count($this->rows);
+			$this->rows[] = new Row($result, $nb_rows > 0 ? $this->rows[$nb_rows - 1] : null);
 		}
 	}
 }
