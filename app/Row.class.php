@@ -151,6 +151,42 @@ class Row {
 		if(preg_match('/Impossible WHERE(;|$)/', $this->cells['Extra']->v)) {
 			$infos[] = "The WHERE clause is always false and cannot select any rows.";
 		}
+		// LooseScan
+		if(preg_match('/LooseScan(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "The semi-join LooseScan strategy is used.";
+		}
+		// No matching min/max row
+		if(preg_match('/No matching min\\/max row(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "No row satisfies the condition for a query such as <code>SELECT MIN(col) FROM table WHERE condition</code>";
+		}
+		// no matching row in const table
+		if(preg_match('/no matching row in const table(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "For a query with a join, there was an empty table or a table with no rows satisfying a unique index condition";
+		}
+		// no matching row in const table
+		if(preg_match('/No matching rows after partition pruning(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "For <code>DELETE</code> or <code>UPDATE</code>, the optimizer found nothing to delete or update after partition pruning. It is similar in meaning to <code>Impossible WHERE</code> for <code>SELECT</code> statements.";
+		}
+		// No tables used
+		if(preg_match('/No tables used(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "The query has no <code>FROM</code> clause, or has a <code>FROM DUAL</code> clause.";
+		}
+		// Not exists
+		if(preg_match('/Not exists(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "MySQL was able to do a <code>LEFT JOIN</code> optimization on the query and does not examine more rows in this table for the previous row combination after it finds one row that matches the <code>LEFT JOIN</code> criteria";
+		}
+		// Plan isn't ready yet
+		if(preg_match('/Plan isn\'t ready yet(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "This value occurs with EXPLAIN FOR CONNECTION when the optimizer has not finished creating the execution plan for the statement executing in the named connection. If execution plan output comprises multiple lines, any or all of them could have this Extra value, depending on the progress of the optimizer in determining the full execution plan.";
+		}
+
+
+
+
+		/*
+
+		 */
+
 		if (!count($infos)) {
 			$infos[] = 'Not Implemented Now :(';
 		}
