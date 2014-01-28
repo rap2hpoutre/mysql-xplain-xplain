@@ -8,9 +8,23 @@ class Explainer {
 
 	public $rows = array();
 
-	public function __construct($mysql_version) {
+	public $hints = array();
+
+	public function __construct($query, $mysql_version) {
 		$this->mysql_version = $mysql_version;
 		$this->initExplainCols();
+		$this->performQueryAnalysis($query);
+	}
+
+	public function performQueryAnalysis($query) {
+		if (preg_match('/^\\s*SELECT\\s\\*/i', $query)) {
+			$this->hints[] = 'Use <code>SELECT *</code> only if you need all columns from table';
+		}
+		if (preg_match('/ORDER BY RAND()/i', $query)) {
+			$this->hints[] = '<code>ORDER BY RAND()</code> is slow, try to avoid if you can.
+				You can <a href="http://stackoverflow.com/questions/2663710/how-does-mysqls-order-by-rand-work">read this</a>
+				or <a href="http://stackoverflow.com/questions/1244555/how-can-i-optimize-mysqls-order-by-rand-function">this</a>';
+		}
 	}
 
 	public function initExplainCols() {
@@ -36,7 +50,7 @@ class Explainer {
 		$last_key = null;
 		foreach($results as $key => $result) {
 			$nb_rows = count($this->rows);
-			$this->rows[] = new Row($result, $nb_rows > 0 ? $this->rows[$nb_rows - 1] : null);
+			$this->rows[] = new Row($result, $nb_rows > 0 ? $this->rows[$nb_rows - 1] : null, $this);
 		}
 	}
 }

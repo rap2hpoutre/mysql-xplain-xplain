@@ -11,9 +11,9 @@ $explainer = null;
 
 if (isset($_SESSION['mysql'])) {
 	new DB(
-		$_SESSION['mysql']['host'], 
-		$_SESSION['mysql']['user'], 
-		$_SESSION['mysql']['password'], 
+		$_SESSION['mysql']['host'],
+		$_SESSION['mysql']['user'],
+		$_SESSION['mysql']['password'],
 		$_SESSION['mysql']['base']
 	);
 	$mysql_version = mb_substr(DB::conn()->server_info,0,3);
@@ -30,7 +30,7 @@ if (isset($_SESSION['mysql'])) {
 			$explain_results = DB::conn()->fetchAll(
 				(strpos(strtolower($query), 'explain') === false ? 'EXPLAIN ' : '') . $_POST['query']
 			);
-			$explainer = new Explainer($mysql_version);
+			$explainer = new Explainer($_POST['query'], $mysql_version);
 			$explainer->setResults($explain_results);
 		} catch (DB_Exception $e) {
 			$template->error = utf8_encode($e->getError());

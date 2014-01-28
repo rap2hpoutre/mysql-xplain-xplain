@@ -13,8 +13,7 @@
 </form>
 <?php if (isset($this->explainer)) : ?>
 	<hr />
-	<label>Result</label>
-	<!-- <i> Click on each cell to understand result</i> -->
+	<label>Result </label><small class="text-muted pull-right"><i> Click on each cell to understand result</i></small>
 	<?php if (count($this->explainer->rows)>0): ?>
 		<table class="table table-striped">
 			<thead>
@@ -50,6 +49,15 @@
 			<a id="mysql_doc_link" class="pull-right" target="_blank" href="#" class="mysq_doc_link"><span class="glyphicon glyphicon-question-sign" ></span></a>
 			<span id="infos_text"></span>
 		</div>
+		<?php if (count($this->explainer->hints)) : ?>
+			<hr />
+			<label>Hints</label>
+			<ol>
+			<?php foreach($this->explainer->hints as $hint) : ?>
+				<li><?=$hint?></li>
+			<?php endforeach; ?>
+			</ol>
+		<?php endif; ?>
 	<?php else : ?>
 		<p>No result ?!#/p>
 	<?php endif; ?>

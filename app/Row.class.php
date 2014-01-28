@@ -25,16 +25,21 @@ class Row {
 	 */
 	private $_previous_row = null;
 
+	private $_explainer = null;
+
 	/**
 	 * @param $row
 	 * @param Row $prev
 	 */
-	public function __construct($row, Row $prev = null) {
+	public function __construct($row, Row $prev = null, Explainer $explainer = null) {
 		foreach($row as $k => $v) {
 			$this->cells[$k] = new Cell($v);
 		}
 		if ($prev !== null) {
 			$this->_previous_row = $prev;
+		}
+		if ($explainer !== null) {
+			$this->_explainer = $explainer;
 		}
 
 		$this->buildTableSchema();
@@ -80,12 +85,13 @@ class Row {
 		// Contient Using temporary; Using filesort
 		if (preg_match('/Using temporary;\\s*Using filesort/', $this->cells['Extra']->v)) {
 			$this->cells['Extra']->setDanger();
+			$this->_explainer->hints[] = 'You should avoid <code>Using temporary</code> and <code>Using filesort</code> on big queries';
 			$infos[] = 	'<p>You should avoid <code>Using temporary</code> and <code>Using filesort</code> on big queries.
 						It means a temporary table is created, and a sort is performed on that temporary table</p>
 						<ul>
 							<li>Using temporary: To resolve the query, MySQL needs to create a temporary table to hold the result</li>
 							<li>Using filesort: MySQL must do an extra pass to find out how to retrieve the rows in sorted order.
-							The sort is done by going through all rows according to the join type and storing the sort key and 
+							The sort is done by going through all rows according to the join type and storing the sort key and
 							pointer to the row for all rows that match the WHERE clause.</li>
 						</ul>';
 		} elseif (preg_match('/Using temporary(;|$)/', $this->cells['Extra']->v)) {
@@ -97,7 +103,7 @@ class Row {
 		}
 		// Contient Impossible WHERE noticed after reading const tables
 		if (preg_match('/Impossible WHERE noticed after reading const tables/', $this->cells['Extra']->v)) {
-			$infos[] = 	'MySQL has read all <code>const</code> (and <code>system</code>) tables and 
+			$infos[] = 	'MySQL has read all <code>const</code> (and <code>system</code>) tables and
 						notice that the WHERE clause is always false';
 		}
 		// Contient Using where
@@ -112,6 +118,9 @@ class Row {
 			$infos[] = "Tables from earlier joins are read in portions into the join buffer, and then their rows
 						are used from the buffer to perform the join with the current table
 						<code>{$this->cells['table']->v}</code> using <code>{$matches[1]}</code> algorithm";
+		} elseif(preg_match('/Using join buffer(;|$)/', $this->cells['Extra']->v)) {
+			$infos[] = "Tables from earlier joins are read in portions into the join buffer, and then their rows
+						are used from the buffer to perform the join with the current table";
 		}
 		// Contient Using index
 		if(preg_match('/Using index(;|$)/', $this->cells['Extra']->v)) {
@@ -190,7 +199,7 @@ class Row {
 		if (!count($infos)) {
 			$infos[] = 'Not Implemented Now :(';
 		}
-		
+
 		$this->cells['Extra']->info = implode('<br /><br />', $infos);
 	}
 
@@ -272,7 +281,7 @@ class Row {
 			'unique_subquery'=> 'This type replaces ref for some IN subqueries of the following form:' .
 								\SqlFormatter::highlight("value IN (SELECT primary_key FROM single_table WHERE some_expr)"),
 			'index_subquery' => 'This join type is similar to unique_subquery. It replaces IN subqueries, but it works for nonunique indexes.',
-			'range' =>          "<p>Only rows that are in a given range are retrieved, using an index (in this query <code>{$this->cells['key']->v}</code>) 
+			'range' =>          "<p>Only rows that are in a given range are retrieved, using an index (in this query <code>{$this->cells['key']->v}</code>)
 								to select the rows.</p>
 								<ul><li>The <code>key</code> column in the output row indicates which index is used.</li>
 								<li>The <code>key_len</code> contains the longest key part that was used</li></ul>",
@@ -305,13 +314,13 @@ class Row {
 		// s'il s'agit d'une référence à une colonne d'une table : base.table.column
 		if (preg_match('/^.+?\\..+?\\..+$/', $this->cells['ref']->v)) {
 			$ref_infos = explode('.', $this->cells['ref']->v);
-			$this->cells['ref']->info = "The <code>{$ref_infos[2]}</code> column of table <code>{$ref_infos[1]}</code> is compared to 
+			$this->cells['ref']->info = "The <code>{$ref_infos[2]}</code> column of table <code>{$ref_infos[1]}</code> is compared to
 										<code>{$this->cells['key']->v}</code> key of table <code>{$this->cells['table']->v}</code>";
 		}
 		if (preg_match('/const/', $this->cells['ref']->v)) {
 			$this->cells['ref']->info = "A constant value is compared to <code>{$this->cells['key']->v}</code>";
 		}
-		
+
 	}
 
 	public function initKeys($table) {
