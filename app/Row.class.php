@@ -317,6 +317,9 @@ class Row {
 			$this->cells['ref']->info = "The <code>{$ref_infos[2]}</code> column of table <code>{$ref_infos[1]}</code> is compared to
 										<code>{$this->cells['key']->v}</code> key of table <code>{$this->cells['table']->v}</code>";
 		}
+		if (preg_match('/func/', $this->cells['ref']->v)) {
+			$this->cells['ref']->info = "The value used as input to <code>{$this->cells['type']->v}</code> is the output of some function";
+		}
 		if (preg_match('/const/', $this->cells['ref']->v)) {
 			$this->cells['ref']->info = "A constant value is compared to <code>{$this->cells['key']->v}</code>";
 		}
