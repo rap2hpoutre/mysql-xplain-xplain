@@ -27,7 +27,7 @@ if (isset($_SESSION['mysql'])) {
 				do { if ($res = DB::conn()->store_result()) $res->free(); } while (DB::conn()->more_results() && DB::conn()->next_result());
 			}
 
-			$explain_results = DB::conn()->fetchAll(
+			$explain_results = @DB::conn()->fetchAll(
 				(strpos(strtolower($query), 'explain') === false ? 'EXPLAIN ' : '') . $_POST['query']
 			);
 			$explainer = new Explainer($_POST['query'], $mysql_version);

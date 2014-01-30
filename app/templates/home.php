@@ -28,7 +28,7 @@
 					<tr>
 						<?php foreach($row->cells as $cell): ?>
 							<td id="<?=$cell->id?>">
-								<a class="a-black" href="#" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $cell->info, "link" => "#")));?>">
+								<a class="a-black" href="#" data-action="showInfos" data-params="<?=$this->e(json_encode(array("infos" => $cell->info, "link" => $this->mysql_base_doc_url)));?>">
 									<?php if ($cell->isDanger()): ?>
 										<span class="label label-danger"><span class="glyphicon glyphicon-fire"></span> <?=$cell->v?></span>
 									<?php elseif ($cell->isSuccess()): ?>
@@ -53,9 +53,9 @@
 			<hr />
 			<label>Hints</label>
 			<ol>
-			<?php foreach($this->explainer->hints as $hint) : ?>
-				<li><?=$hint?></li>
-			<?php endforeach; ?>
+				<?php foreach($this->explainer->hints as $hint) : ?>
+					<li><?=$hint?></li>
+				<?php endforeach; ?>
 			</ol>
 		<?php endif; ?>
 	<?php else : ?>

@@ -1,7 +1,17 @@
 <?php
 namespace Rap2hpoutre\MySQLExplainExplain;
 
+/**
+ * Explainer
+ *
+ * @package xplain
+ * @author e-doceo
+ * @copyright 2014
+ * @version $Id$
+ * @access public
+ */
 class Explainer {
+
 	public $header_row;
 
 	public $mysql_version;
@@ -21,6 +31,20 @@ class Explainer {
 		$this->mysql_version = $mysql_version;
 		$this->initExplainCols();
 		$this->performQueryAnalysis($query);
+	}
+
+	/**
+	 * Explainer::setResults()
+	 *
+	 * @param mixed $results
+	 * @return
+	 */
+	public function setResults($results) {
+		$last_key = null;
+		foreach($results as $key => $result) {
+			$nb_rows = count($this->rows);
+			$this->rows[] = new Row($result, $nb_rows > 0 ? $this->rows[$nb_rows - 1] : null, $this);
+		}
 	}
 
 	/**
@@ -48,12 +72,13 @@ class Explainer {
 			$this->hints[] = '<code>LIMIT</code> without <code>ORDER BY</code> causes non-deterministic results, depending on the query execution plan';
 		}
 		if (preg_match('/LIKE\\s[\'"](%.*?)[\'"]/i', $query, $matches)) {
-			$this->hints[] = 'An argument has a leading wildcard character: <code>' . $matches[1]. '</code>. The predicate with this argument is not sargable and cannot use an index if one exists.';
+			$this->hints[] = 	'An argument has a leading wildcard character: <code>' . $matches[1]. '</code>.
+								The predicate with this argument is not sargable and cannot use an index if one exists.';
 		}
 		if ($this->mysql_version < 5.5) {
 			if (preg_match('/\\sIN\\s*\\(\\s*SELECT/i', $query)) {
-				$this->hints[] = '<code>IN()</code> and <code>NOT IN()</code> subqueries are poorly optimized in that MySQL version : ' . $this->mysql_version .
-				'. MySQL executes the subquery as a dependent subquery for each row in the outer query';
+				$this->hints[] = 	'<code>IN()</code> and <code>NOT IN()</code> subqueries are poorly optimized in that MySQL version : ' . $this->mysql_version .
+									'. MySQL executes the subquery as a dependent subquery for each row in the outer query';
 			}
 		}
 	}
@@ -80,19 +105,5 @@ class Explainer {
 		}
 
 		$this->header_row['Extra'] = 'This column contains additional information about how MySQL resolves the query. For descriptions of the different values, see EXPLAIN Extra Information.';
-	}
-
-	/**
-	 * Explainer::setResults()
-	 *
-	 * @param mixed $results
-	 * @return
-	 */
-	public function setResults($results) {
-		$last_key = null;
-		foreach($results as $key => $result) {
-			$nb_rows = count($this->rows);
-			$this->rows[] = new Row($result, $nb_rows > 0 ? $this->rows[$nb_rows - 1] : null, $this);
-		}
 	}
 }
