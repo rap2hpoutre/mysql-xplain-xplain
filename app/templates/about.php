@@ -1,8 +1,8 @@
 <?php $this->layout('layout'); ?>
 <h3>What?</h3>
 <p>
-MySQL <code>EXPLAIN</code> command is sometimes hard to understand.
-<i>Mysql Explain Explain</i> highlights and explain queries. It gives also hints and links. Hope it will help.
+The MySQL <code>EXPLAIN</code> command is sometimes hard to understand.
+<a target="_blank" href="http://mxx.mnstrl.org">Mysql Explain Explain</a> highlights and explain queries. It gives also hints and links. Hope it will help.
 </p>
 <h3>Dependencies</h3>
 <p><?=$this->title?> has some <a target="_blank" href="http://depending.in/rap2hpoutre/mysql-xplain-xplain">dependencies</a>. Many thanks to authors!</p>

@@ -11,6 +11,7 @@
 
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="./css/default.css" />
+	<link rel="icon" type="image/x-icon" href="./favicon.ico" />
 
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
