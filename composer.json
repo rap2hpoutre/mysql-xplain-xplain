@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "league/plates": "1.0.*",
+        "league/plates": "1.1.*",
 		"jasny/db-mysql": "*",
 		"jdorn/sql-formatter": "dev-master"
     }

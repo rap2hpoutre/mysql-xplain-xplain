@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "fed331c1335eaa02bd048d51c7ba2161",
+    "hash": "3f38bedd7ef11188005881853e8e5301",
     "packages": [
         {
             "name": "jasny/db-mysql",
@@ -104,20 +104,17 @@
         },
         {
             "name": "league/plates",
-            "version": "1.0.11",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-loep/Plates.git",
-                "reference": "95a2443409f455ece373c5c7b5aaf03e4bb1537d"
+                "url": "https://github.com/thephpleague/plates.git",
+                "reference": "d73a08f8094e7d2aac0018ec1c2200ba2ac07a6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-loep/Plates/zipball/95a2443409f455ece373c5c7b5aaf03e4bb1537d",
-                "reference": "95a2443409f455ece373c5c7b5aaf03e4bb1537d",
+                "url": "https://api.github.com/repos/thephpleague/plates/zipball/d73a08f8094e7d2aac0018ec1c2200ba2ac07a6e",
+                "reference": "d73a08f8094e7d2aac0018ec1c2200ba2ac07a6e",
                 "shasum": ""
-            },
-            "replace": {
-                "reinink/plates": "*"
             },
             "require-dev": {
                 "mikey179/vfsstream": "v1.2.0",
@@ -126,8 +123,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "League\\Plates": "src/"
+                "psr-4": {
+                    "League\\Plates\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -148,7 +145,7 @@
                 "package",
                 "templating"
             ],
-            "time": "2013-11-21 19:21:31"
+            "time": "2014-01-31 23:43:18"
         }
     ],
     "packages-dev": [
