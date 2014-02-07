@@ -6,6 +6,7 @@ require '../app/Explainer.class.php';
 require '../app/Row.class.php';
 require '../app/Cell.class.php';
 require '../app/Key.class.php';
+require '../app/Column.class.php';
 require '../app/constants.php';
 
 session_start();

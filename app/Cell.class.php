@@ -32,5 +32,4 @@ class Cell {
 		return $this->score === 0;
 	}
 
-
 }

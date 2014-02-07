@@ -34,17 +34,22 @@ class Explainer {
 	}
 
 	/**
-	 * Explainer::setResults()
+	 * Explainer::addRow()
 	 *
-	 * @param mixed $results
+	 * @param mixed $row
+	 * @return void
+	 */
+	public function addRow(Row $row) {
+		$this->rows[] = $row;
+	}
+
+	/**
+	 * Explainer::getRowsCount()
+	 *
 	 * @return
 	 */
-	public function setResults($results) {
-		$last_key = null;
-		foreach($results as $key => $result) {
-			$nb_rows = count($this->rows);
-			$this->rows[] = new Row($result, $nb_rows > 0 ? $this->rows[$nb_rows - 1] : null, $this);
-		}
+	public function getRowsCount() {
+		return count($this->rows);
 	}
 
 	/**
@@ -54,7 +59,7 @@ class Explainer {
 	 * @return
 	 */
 	public function performQueryAnalysis($query) {
-		if (preg_match('/^\\s*SELECT\\s\\*/i', $query)) {
+		if (preg_match('/^\\s*SELECT\\s*`?[a-zA-Z0-9]*`?\\.?\\*/i', $query)) {
 			$this->hints[] = 'Use <code>SELECT *</code> only if you need all columns from table';
 		}
 		if (preg_match('/ORDER BY RAND()/i', $query)) {
@@ -100,7 +105,7 @@ class Explainer {
 			'ref' => 'The ref column shows which columns or constants are compared to the index named in the key column to select rows from the table.',
 			'rows' => 'The rows column indicates the number of rows MySQL believes it must examine to execute the query. For InnoDB tables, this number is an estimate, and may not always be exact.',
 		);
-		if((float)$this->mysql_version >= 5.7) {
+		if ((float) $this->mysql_version >= 5.7) {
 			$this->header_row['filtered'] = 'The filtered column indicates an estimated percentage of table rows that will be filtered by the table condition. That is, rows shows the estimated number of rows examined and rows × filtered / 100 shows the number of rows that will be joined with previous tables.';
 		}
 

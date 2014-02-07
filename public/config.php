@@ -9,9 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if (!$_POST['user']) $_POST['user'] = 'root';
 		if (!$_POST['base']) $_POST['base'] = 'test';
 		$c = @new DB(
-			$_POST['host'], 
-			$_POST['user'], 
-			$_POST['password'], 
+			$_POST['host'],
+			$_POST['user'],
+			$_POST['password'],
 			$_POST['base']
 		);
 		if ($c->connect_errno) {
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	} catch (\Exception $e) {
 		$template->error = utf8_encode($e->getMessage());
 	}
-	
+
 }
 
 // Affichage
