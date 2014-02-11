@@ -7,7 +7,7 @@ Explain Explainer for MySQL Queries. Something like an upgraded `EXPLAIN` comman
 
 Getting started
 ---------------
- - Download and unzip it into your webroot folder or install via composer : `composer create-project rap2h/mysql-explain-explain --prefer-dist`
+ - [Download last release archive](https://github.com/rap2hpoutre/mysql-xplain-xplain/releases/download/v0.2.0/rap2h-mysql-explain-explain-0.2.0.zip) and unzip it into your webroot folder or install via composer : `composer create-project rap2h/mysql-explain-explain --prefer-dist`
  - Launch your web server, goto http://localhost/xplain or something like that
  - Start typing your queries
 
