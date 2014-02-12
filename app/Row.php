@@ -386,7 +386,6 @@ class Row {
 		} catch (DB_Exception $e) { }
 	}
 
-
 	/**
 	 * Row::getPrimaryKey()
 	 *
