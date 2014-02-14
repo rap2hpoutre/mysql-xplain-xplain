@@ -50,7 +50,7 @@ class Row {
 
 		$this->buildTableSchema();
 		$this->initKeys($this->cells['table']->v);
-		// $this->initColumns($this->cells['table']->v);
+		$this->initColumns($this->cells['table']->v);
 
 		$this->performSelectTypeAnalysis();
 		$this->performExtraAnalysis();
