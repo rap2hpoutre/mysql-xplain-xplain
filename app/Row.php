@@ -323,6 +323,8 @@ class Row {
 	 * @return
 	 */
 	public function performRefAnalysis() {
+		$this->cells['ref']->v = str_replace(',', ', ', $this->cells['ref']->v);
+		
 		if (!$this->cells['ref']->v) return;
 		// s'il s'agit d'une référence à une colonne d'une table : base.table.column
 		if (preg_match('/^.+?\\..+?\\..+$/', $this->cells['ref']->v)) {
