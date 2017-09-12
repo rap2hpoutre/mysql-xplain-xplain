@@ -1,10 +1,10 @@
 {
-    "name": "rap2h/mysql-explain-explain",
+    "name": "rap2hpoutre/mysql-explain-explain",
     "description": "Mysql Explain Explainer",
     "license": "MIT",
     "authors": [
         {
-            "name": "Raphael Ht",
+            "name": "rap2hpoutre",
             "email": "raphaelht@gmail.com"
         }
     ],
