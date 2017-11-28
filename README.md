@@ -1,7 +1,7 @@
 mysql-xplain-xplain
 ===================
 
-[![Build Status](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain.png?branch=master)](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rap2hpoutre/mysql-xplain-xplain/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Build Status](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain.png?branch=master)](https://travis-ci.org/rap2hpoutre/mysql-xplain-xplain) 
 
 Explain Explainer for MySQL Queries. Something like an upgraded `EXPLAIN` command for browser. Highlights and explains MySQL queries. It gives also hints and links. Hope it will help. More info here : http://mxx.mnstrl.org/
 
