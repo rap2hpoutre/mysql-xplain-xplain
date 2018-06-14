@@ -16,6 +16,10 @@
 		<label for="base">Default database</label>
 		<input type="text" class="form-control" name="base" id="base" placeholder="test" value="<?php if (isset($_SESSION['mysql']['base'])) echo $_SESSION['mysql']['base']; ?>">
 	</div>
+	<div class="form-group">
+		<label for="port">Port</label>
+		<input type="text" class="form-control" name="port" id="port" placeholder="3306" value="<?php if (isset($_SESSION['mysql']['port'])) echo $_SESSION['mysql']['port']; ?>">
+	</div>
 	<div class="checkbox">
 		<label>
 			<input name="permanent_login" type="checkbox" value="1"> Permanent login

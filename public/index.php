@@ -15,7 +15,8 @@ if (isset($_SESSION['mysql'])) {
 		$_SESSION['mysql']['host'],
 		$_SESSION['mysql']['user'],
 		$_SESSION['mysql']['password'],
-		$_SESSION['mysql']['base']
+		$_SESSION['mysql']['base'],
+		$_SESSION['mysql']['port']
 	);
 	$mysql_version = mb_substr(DB::conn()->server_info,0,3);
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
