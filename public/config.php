@@ -8,11 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if (!$_POST['host']) $_POST['host'] = 'localhost';
 		if (!$_POST['user']) $_POST['user'] = 'root';
 		if (!$_POST['base']) $_POST['base'] = 'test';
+		if (!$_POST['port']) $_POST['port'] = '3306';
 		$c = @new DB(
 			$_POST['host'],
 			$_POST['user'],
 			$_POST['password'],
-			$_POST['base']
+			$_POST['base'],
+			$_POST['port']
 		);
 		if ($c->connect_errno) {
 			throw new Exception ('Failed to connect to MySQL: ' . $c->connect_error);
@@ -27,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					\'host\' => \'' . $_POST['host'] . '\',
 					\'user\' => \'' . $_POST['user'] . '\',
 					\'password\' => \'' . $_POST['password'] . '\',
-					\'base\' => \'' . $_POST['base'] . '\'
+					\'base\' => \'' . $_POST['base'] . '\',
+					\'port\' => \'' . $_POST['port'] . '\'
 				);'
 			);
 		} else {
@@ -36,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				'host' => $_POST['host'],
 				'user' => $_POST['user'],
 				'password' => $_POST['password'],
-				'base' => $_POST['base']
+				'base' => $_POST['base'],
+				'port' => $_POST['port']
 			);
 		}
 		// Redirection
